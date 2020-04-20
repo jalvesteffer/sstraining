@@ -50,6 +50,11 @@ public class UserInterface {
 	public void start() {
 		// program title
 		System.out.println("LIBRARY MANAGEMENT SYSTEM");
+		
+		// load file data
+		authorStore.readFromFile(authorFilePath);
+		publisherStore.readFromFile(publisherFilePath);
+		bookStore.readFromFile(bookFilePath);
 
 		// launches the main menu
 		mainMenu();
@@ -391,7 +396,7 @@ public class UserInterface {
 	}
 
 	/**
-	 * This method allows user to update a book
+	 * This method allows user to update a book.
 	 * 
 	 * @param book book to update
 	 */
