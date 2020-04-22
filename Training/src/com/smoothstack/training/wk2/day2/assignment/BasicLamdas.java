@@ -21,12 +21,27 @@ public class BasicLamdas {
 
 	public static void main(String[] args) {
 
-		// Question 1 solutions
+		// Question 1, Bullet 1 Solution
 		lengthShortestToLongest();
+		
+		// Question 1, Bullet 2 Solution
 		lengthLongestToShortest();
+		
+		// Question 1, Bullet 3 Solution
 		alphabeticallyByFirstCharacter();
+		
+		// Question 1, Bullet 4 Solution
 		eStringsFirst();
-		// not done yet
+		
+		// Question 1, Bullet 5 Solution
+		System.out.println();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Strings that contain 'e' first with Helper Method");
+		System.out.println();
+
+		Arrays.sort(animalStrings, (String x, String y) -> eStringsFirstWithHelperMethod(x, y));
+		List<String> sortedList = Arrays.asList(animalStrings);
+		sortedList.forEach(System.out::println);
 
 	}
 
@@ -82,6 +97,17 @@ public class BasicLamdas {
 		};
 
 		eListInterface.makeList(animalList);
+	}
+
+	public static Integer eStringsFirstWithHelperMethod(String x, String y) {
+
+		if (x.contains("e") && !y.contains("e")) {
+			return -1;
+		}
+		if (y.contains("e") && !x.contains("e")) {
+			return 1;
+		}
+		return 0;
 	}
 
 }
