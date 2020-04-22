@@ -36,17 +36,32 @@ public class DateAPIQuestions {
 		 * Convert from ZonedDateTime -> Instant Use the toInstant() method on the
 		 * dateTime
 		 */
+
+		// Question 6 Solution
+		System.out.println();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Number of Mondays question");
+		System.out.println();
+
+		int monthToTest = 3;
+		int mondayCount = numberOfMondays(monthToTest);
 		
+		System.out.println("There are " + mondayCount + " mondays in month " + monthToTest + " of 2020.");
+
 		// Question 7 Solution
+		System.out.println();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Friday the 13th Question");
+		System.out.println();
 		
-		// set date here to test 
+		// set date here to test
 		LocalDate calDate = LocalDate.of(2020, Month.MARCH, 13);
-		
-	   	if (isFridayTheThirteenth(calDate))	{
-	   		System.out.println("It's Friday the 13th");
-	   	} else	{
-	   		System.out.println("It's not Friday the 13th");
-	   	}
+				
+		if (isFridayTheThirteenth(calDate)) {
+			System.out.println("It's Friday the 13th");
+		} else {
+			System.out.println("It's not Friday the 13th");
+		}
 	}
 
 	public static boolean isFridayTheThirteenth(LocalDate calDate) {
@@ -57,5 +72,22 @@ public class DateAPIQuestions {
 			return false;
 		}
 
+	}
+
+	public static int numberOfMondays(int month) {
+
+		int mondayCount = 0;
+
+		LocalDate currDate = LocalDate.of(2020, month, 1);
+		LocalDate nextMonthDate = currDate.plusMonths(1);
+
+		while (currDate.isBefore(nextMonthDate)) {
+			if (currDate.getDayOfWeek() == DayOfWeek.MONDAY) {
+				mondayCount++;
+			}
+			currDate = currDate.plusDays(1);
+		}
+
+		return mondayCount;
 	}
 }
