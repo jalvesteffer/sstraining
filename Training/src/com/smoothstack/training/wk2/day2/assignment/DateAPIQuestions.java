@@ -37,6 +37,13 @@ public class DateAPIQuestions {
 		 * dateTime
 		 */
 
+		// Question 5 Solution
+		System.out.println("Length of each month in a year question");
+		System.out.println();
+
+		int yearToTest = 2020;
+		numberOfDaysInMonth(yearToTest);
+
 		// Question 6 Solution
 		System.out.println();
 		System.out.println("-------------------------------------------------------");
@@ -45,7 +52,7 @@ public class DateAPIQuestions {
 
 		int monthToTest = 3;
 		int mondayCount = numberOfMondays(monthToTest);
-		
+
 		System.out.println("There are " + mondayCount + " mondays in month " + monthToTest + " of 2020.");
 
 		// Question 7 Solution
@@ -53,25 +60,30 @@ public class DateAPIQuestions {
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Friday the 13th Question");
 		System.out.println();
-		
+
 		// set date here to test
 		LocalDate calDate = LocalDate.of(2020, Month.MARCH, 13);
-				
+
 		if (isFridayTheThirteenth(calDate)) {
 			System.out.println("It's Friday the 13th");
 		} else {
 			System.out.println("It's not Friday the 13th");
 		}
 	}
+	
+	public static void numberOfDaysInMonth(int year) {
 
-	public static boolean isFridayTheThirteenth(LocalDate calDate) {
+		int dayCount = 0;
 
-		if (calDate.getDayOfMonth() == 13 && calDate.getDayOfWeek() == DayOfWeek.FRIDAY) {
-			return true;
-		} else {
-			return false;
+		LocalDate currMonthDate = LocalDate.of(year, Month.JANUARY, 1);
+		LocalDate nextYearDate = currMonthDate.plusYears(1);
+		
+		System.out.println("Number of days in each month for " + year);
+
+		while (currMonthDate.isBefore(nextYearDate)) {
+			System.out.println("Month " + currMonthDate.getMonthValue() + ": " + currMonthDate.lengthOfMonth() + " days");
+			currMonthDate = currMonthDate.plusMonths(1);
 		}
-
 	}
 
 	public static int numberOfMondays(int month) {
@@ -90,4 +102,15 @@ public class DateAPIQuestions {
 
 		return mondayCount;
 	}
+	
+	public static boolean isFridayTheThirteenth(LocalDate calDate) {
+
+		if (calDate.getDayOfMonth() == 13 && calDate.getDayOfWeek() == DayOfWeek.FRIDAY) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 }
