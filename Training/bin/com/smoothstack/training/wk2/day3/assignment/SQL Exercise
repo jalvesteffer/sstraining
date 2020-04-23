@@ -11,3 +11,15 @@ INNER JOIN tbl_library_branch AS t_lb
 WHERE t_b.title='The Stand' 
 	AND t_lb.branchName='Fenwick Library';
 
+
+Question 2:
+
+SELECT t_lb.branchName, count(*) AS noOfCopies
+FROM tbl_book AS t_b
+INNER JOIN tbl_book_copies AS t_bc 
+	ON t_b.bookId=t_bc.bookId 
+INNER JOIN tbl_library_branch AS t_lb 
+	ON t_bc.branchId=t_lb.branchId 
+WHERE t_b.title='The Stand'
+GROUP BY branchName
+ORDER BY branchName ASC;
