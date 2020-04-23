@@ -72,3 +72,19 @@ WHERE dateOut IS NOT NULL
 	AND dateIn IS NULL
 GROUP BY t_b.cardNo
 	HAVING COUNT(t_b.cardNo) > 5
+	
+	
+Question 7:
+
+SELECT title, noOfCopies
+FROM tbl_book AS t_bk
+INNER JOIN tbl_book_authors AS t_ba
+	ON t_bk.bookId=t_ba.bookId
+INNER JOIN tbl_author AS t_a
+	ON t_ba.authorId=t_a.authorId
+INNER JOIN tbl_book_copies AS t_bc
+	ON t_bk.bookId=t_bc.bookId
+INNER JOIN tbl_library_branch AS t_lb
+	ON t_bc.branchId=t_lb.branchId
+WHERE authorName="Stephen King"
+	AND t_lb.branchName="Ashburn Library"
