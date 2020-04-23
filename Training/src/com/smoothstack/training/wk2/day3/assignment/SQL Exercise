@@ -8,8 +8,8 @@ INNER JOIN tbl_book_copies AS t_bc
 	ON t_b.bookId=t_bc.bookId 
 INNER JOIN tbl_library_branch AS t_lb 
 	ON t_bc.branchId=t_lb.branchId 
-WHERE t_b.title='The Stand' 
-	AND t_lb.branchName='Fenwick Library';
+WHERE title='The Stand' 
+	AND branchName='Fenwick Library'
 
 
 Question 2:
@@ -20,6 +20,19 @@ INNER JOIN tbl_book_copies AS t_bc
 	ON t_b.bookId=t_bc.bookId 
 INNER JOIN tbl_library_branch AS t_lb 
 	ON t_bc.branchId=t_lb.branchId 
-WHERE t_b.title='The Stand'
+WHERE title='The Stand'
 GROUP BY branchName
-ORDER BY branchName ASC;
+ORDER BY branchName ASC
+
+
+Question 3:
+
+SELECT DISTINCT name 
+FROM tbl_borrower AS t_b
+LEFT JOIN tbl_book_loans AS t_bl
+	ON t_b.cardNo=t_bl.cardNo
+WHERE bookId IS NULL
+	OR (bookId IS NOT NULL AND dateIn IS NOT NULL)
+ORDER BY name ASC
+
+
