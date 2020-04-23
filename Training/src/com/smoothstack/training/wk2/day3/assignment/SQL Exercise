@@ -10,3 +10,4 @@ INNER JOIN tbl_library_branch AS t_lb
 	ON t_bc.branchId=t_lb.branchId 
 WHERE t_b.title='The Stand' 
 	AND t_lb.branchName='Fenwick Library';
+
