@@ -1,0 +1,12 @@
+SQL Exercise
+
+Question 1:
+
+SELECT count(*) 
+FROM tbl_book AS t_b
+INNER JOIN tbl_book_copies AS t_bc 
+	ON t_b.bookId=t_bc.bookId 
+INNER JOIN tbl_library_branch AS t_lb 
+	ON t_bc.branchId=t_lb.branchId 
+WHERE t_b.title='The Stand' 
+	AND t_lb.branchName='Fenwick Library';
