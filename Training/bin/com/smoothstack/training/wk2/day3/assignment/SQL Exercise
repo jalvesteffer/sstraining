@@ -44,4 +44,11 @@ INNER JOIN tbl_book AS t_bk
 	ON t_bl.bookId=t_bk.bookId
 INNER JOIN tbl_borrower AS t_bw
 	ON t_bl.cardNo=t_bw.cardNo
-WHERE dueDate=current_date()
+INNER JOIN tbl_library_branch AS t_lb
+	ON t_bl.branchId=t_lb.branchId
+WHERE branchName='Loudoun Campus Library'
+	AND dueDate=current_date()
+
+
+Question 5:
+
