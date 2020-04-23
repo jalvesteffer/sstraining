@@ -36,3 +36,12 @@ WHERE bookId IS NULL
 ORDER BY name ASC
 
 
+Question 4:
+
+SELECT t_bk.title, t_bw.name, t_bw.address
+FROM tbl_book_loans AS t_bl
+INNER JOIN tbl_book AS t_bk
+	ON t_bl.bookId=t_bk.bookId
+INNER JOIN tbl_borrower AS t_bw
+	ON t_bl.cardNo=t_bw.cardNo
+WHERE dueDate=current_date()
