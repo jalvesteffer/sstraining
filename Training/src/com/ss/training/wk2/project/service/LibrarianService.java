@@ -71,46 +71,13 @@ public class LibrarianService {
 	 * @throws SQLException
 	 */
 	public void saveBranch(Branch branch) throws SQLException {
+		AdminService adminService = new AdminService();
 
-		Connection conn = null; // database connection
-
-		try {
-			// get a new database connection and pass it to a BranchDAO
-			conn = connUtil.getConnection();
-			BranchDAO aDAO = new BranchDAO(conn);
-
-			// perform CRUD operation depending on which branch variables are set
-			if (branch.getBranchId() != null && branch.getBranchName() != null) {
-				// perform update
-				aDAO.updateBranch(branch);
-			} else if (branch.getBranchId() != null) {
-				// perform deletion
-				aDAO.deleteBranch(branch);
-			} else {
-				// perform creation
-				aDAO.addBranch(branch);
-			}
-
-			// commit transaction and display success message
-			conn.commit();
-			System.out.println("\nUpdated " + branch.getBranchName() + " Branch Successfully");
-
-		} catch (ClassNotFoundException | SQLException e) {
-
-			// transaction failed. Rollback changes made
-			conn.rollback();
-			System.out.println("Branch transaction failed.  Transaction rolled back.");
-
-		} finally {
-
-			// close database connection
-			if (conn != null) {
-				conn.close();
-			}
-		}
+		adminService.saveBranch(branch);
 
 	}
 
+	// updates the number of copies a book at a specified branch has
 	public void saveBookCopies(Integer bookId, Integer branchId, Integer numCopies) throws SQLException {
 
 		Connection conn = null; // database connection
