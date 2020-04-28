@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ss.training.wk2.project.entity.Borrower;
-import com.ss.training.wk2.project.entity.Genre;
 
 /**
  * @author jalveste
@@ -46,7 +45,7 @@ public class BorrowerDAO extends BaseDAO<Borrower> {
 
 	}
 
-	public Borrower readBorrowerById(Integer cardNo) throws ClassNotFoundException, SQLException {
+	public Borrower readBorrowerByCardNo(Integer cardNo) throws ClassNotFoundException, SQLException {
 		List<Borrower> borrowerList = new ArrayList<>();
 		borrowerList = read("SELECT * FROM tbl_borrower WHERE cardNo=?", new Object[] { cardNo });
 
@@ -56,6 +55,14 @@ public class BorrowerDAO extends BaseDAO<Borrower> {
 			return null;
 		}
 
+	}
+	
+	public List<Borrower> readBorrowerById(Integer cardNo) throws ClassNotFoundException, SQLException {
+		return read("SELECT * FROM tbl_borrower WHERE cardNo=?", new Object[] { cardNo });
+	}
+	
+	public List<Borrower> readBorrowerByName(String name) throws ClassNotFoundException, SQLException {
+		return read("SELECT * FROM tbl_borrower WHERE name=?", new Object[] { name });
 	}
 
 	@Override

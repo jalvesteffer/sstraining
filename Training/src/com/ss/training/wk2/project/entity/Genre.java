@@ -4,36 +4,61 @@
 package com.ss.training.wk2.project.entity;
 
 /**
+ * This class represents a book genre
+ * 
  * @author jalveste
  *
  */
 public class Genre {
-	private Integer genreId;
-	private String genreName;
+
+	private Integer genreId; // id key
+	private String genreName; // genre name
+	
+	/**
+	 * 
+	 */
+	public Genre() {
+		super();
+	}
+
+	/**
+	 * @param genreId
+	 * @param genreName
+	 */
+	public Genre(Integer genreId, String genreName) {
+		super();
+		this.genreId = genreId;
+		this.genreName = genreName;
+	}
+
 	/**
 	 * @return the genreId
 	 */
 	public Integer getGenreId() {
 		return genreId;
 	}
+
 	/**
 	 * @param genreId the genreId to set
 	 */
 	public void setGenreId(Integer genreId) {
 		this.genreId = genreId;
 	}
+
 	/**
 	 * @return the genreName
 	 */
 	public String getGenreName() {
 		return genreName;
 	}
+
 	/**
 	 * @param genreName the genreName to set
 	 */
 	public void setGenreName(String genreName) {
 		this.genreName = genreName;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -42,6 +67,7 @@ public class Genre {
 		result = prime * result + ((genreName == null) ? 0 : genreName.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

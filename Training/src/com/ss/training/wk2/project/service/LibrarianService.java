@@ -12,12 +12,10 @@ import com.ss.training.wk2.project.dao.AuthorDAO;
 import com.ss.training.wk2.project.dao.BookCopiesDAO;
 import com.ss.training.wk2.project.dao.BookDAO;
 import com.ss.training.wk2.project.dao.BranchDAO;
-import com.ss.training.wk2.project.dao.PublisherDAO;
 import com.ss.training.wk2.project.entity.Author;
 import com.ss.training.wk2.project.entity.Book;
 import com.ss.training.wk2.project.entity.BookCopies;
 import com.ss.training.wk2.project.entity.Branch;
-import com.ss.training.wk2.project.entity.Publisher;
 
 /**
  * @author jalveste
@@ -27,72 +25,44 @@ public class LibrarianService {
 
 	public ConnectionUtil connUtil = new ConnectionUtil();
 
-
-	public List<Branch> readBranches(Integer pk, String branchName) throws SQLException {
-		Connection conn = null; // reference to database connection
-
+	
+	public Integer readBookCopies(Integer bookId, Integer branchId) throws SQLException {
+		Connection conn = null;
+		BookCopies bookCopies = null;
 		try {
-			// get a database connection and pass it to a new branch DAO
 			conn = connUtil.getConnection();
-			BranchDAO pDAO = new BranchDAO(conn);
+			BookCopiesDAO bcDAO = new BookCopiesDAO(conn);
 
-			if (pk != null) {
-				// gets branch by primary key
-				List<Branch> branches = pDAO.readBranchById(pk);
-				return branches;
-			} else if (branchName != null) {
-				// gets branch by name
-			} else {
-				// returns all branches
-				List<Branch> branches = pDAO.readAllBranches();
+			bookCopies = bcDAO.readBookCopiesByBookIdBranchId(bookId, branchId);
 
-				return branches;
-			}
 		} catch (Exception e) {
-			System.out.println("read BranchDAO failed");
-			e.printStackTrace();
+			return 0;
 		} finally {
-
-			// close the database connection
 			if (conn != null) {
 				conn.close();
 			}
 		}
-		return null;
 
+		// if the bookCopiesList is 0, there are no book copies in the result
+		// otherwise, return the number of book copies
+		if (bookCopies == null) {
+			return 0;
+		} else {
+			return bookCopies.getNoOfCopies();
+		}
+	}
+	
+	
+	public List<Branch> readBranches(Integer pk, String branchName) throws SQLException {
+		AdminService adminService = new AdminService();
+
+		return adminService.readBranches(pk, branchName);
 	}
 
 	public List<Book> readBooks(Integer pk, String bookTitle) throws SQLException {
-		Connection conn = null;
-		try {
-			conn = connUtil.getConnection();
-			BookDAO bDAO = new BookDAO(conn);
-			AuthorDAO aDAO = new AuthorDAO(conn);
-			if (pk != null) {
-				System.out.println("GET BOOKS BY PRIMARY KEY");
-				List<Book> books = bDAO.readBookById(pk);
-				return books;
-			} else if (bookTitle != null) {
-				// searchAuthors
-			} else {
-				List<Book> books = bDAO.readAllBooks();
+		AdminService adminService = new AdminService();
 
-				// populate books authors list
-				for (Book b : books) {
-					List<Author> authors = new ArrayList<>();
-					authors = aDAO.readAllAuthorsByBookId(b.getBookId());
-					b.setAuthors(authors);
-				}
-				return books;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (conn != null) {
-				conn.close();
-			}
-		}
-		return null;
+		return adminService.readBooks(pk, bookTitle);
 
 	}
 
@@ -153,13 +123,13 @@ public class LibrarianService {
 
 			// check to see if an entry exists for this book at this branch
 			BookCopies bookCopies = bcDAO.readBookCopiesByBookIdBranchId(bookId, branchId);
-			
-			if (bookCopies == null)	{
+
+			if (bookCopies == null) {
 				bcDAO.createBookCopies(bookId, branchId, numCopies);
-			}	else	{
+			} else {
 				bcDAO.updateBookCopies(bookId, branchId, numCopies);
 			}
-			
+
 			// commit transaction and display success message
 			conn.commit();
 			System.out.println("\nSet copies of book to " + numCopies);
@@ -180,29 +150,5 @@ public class LibrarianService {
 
 	}
 
-	public Integer readBookCopies(Integer bookId, Integer branchId) throws SQLException {
-		Connection conn = null;
-		BookCopies bookCopies = null;
-		try {
-			conn = connUtil.getConnection();
-			BookCopiesDAO bcDAO = new BookCopiesDAO(conn);
 
-			bookCopies = bcDAO.readBookCopiesByBookIdBranchId(bookId, branchId);
-
-		} catch (Exception e) {
-			return 0;
-		} finally {
-			if (conn != null) {
-				conn.close();
-			}
-		}
-
-		// if the bookCopiesList is 0, there are no book copies in the result
-		// otherwise, return the number of book copies
-		if (bookCopies == null) {
-			return 0;
-		} else {
-			return bookCopies.getNoOfCopies();
-		}
-	}
 }

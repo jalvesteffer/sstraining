@@ -31,10 +31,6 @@ import com.ss.training.wk2.project.entity.Publisher;
  * @author jalveste
  *
  */
-/**
- * @author jalveste
- *
- */
 public class AdminService {
 
 	public ConnectionUtil connUtil = new ConnectionUtil();
@@ -174,12 +170,13 @@ public class AdminService {
 			List<Book> books = bDAO.readBookByTitle(title);
 			if (books != null && books.size() > 0) {
 				book = books.get(0);
+				
+				// commit transaction and display success message
+				conn.commit();
+
+				return book.getBookId();
 			}
-
-			// commit transaction and display success message
-			conn.commit();
-
-			return book.getBookId();
+			
 
 		} catch (ClassNotFoundException | SQLException e) {
 
@@ -193,7 +190,7 @@ public class AdminService {
 				conn.close();
 			}
 		}
-		return null;
+		return -1;
 	}
 
 	public Book getBookById(Integer bookId) throws SQLException {
@@ -242,13 +239,12 @@ public class AdminService {
 			List<Publisher> publishers = pDAO.readPublisherByName(name);
 			if (publishers != null && publishers.size() > 0) {
 				publisher = publishers.get(0);
+				
+				// commit transaction and display success message
+				conn.commit();
+
+				return publisher.getPublisherId();
 			}
-
-			// commit transaction and display success message
-			conn.commit();
-
-			return publisher.getPublisherId();
-
 		} catch (ClassNotFoundException | SQLException e) {
 
 			// transaction failed. Rollback changes made
@@ -261,7 +257,7 @@ public class AdminService {
 				conn.close();
 			}
 		}
-		return null;
+		return -1;
 	}
 
 	public Integer getAuthorKey(String name) throws SQLException {
@@ -276,13 +272,12 @@ public class AdminService {
 			List<Author> authors = aDAO.readAuthorByName(name);
 			if (authors != null && authors.size() > 0) {
 				author = authors.get(0);
+				
+				// commit transaction and display success message
+				conn.commit();
+
+				return author.getAuthorId();
 			}
-
-			// commit transaction and display success message
-			conn.commit();
-
-			return author.getAuthorId();
-
 		} catch (ClassNotFoundException | SQLException e) {
 
 			// transaction failed. Rollback changes made
@@ -295,7 +290,7 @@ public class AdminService {
 				conn.close();
 			}
 		}
-		return null;
+		return -1;
 	}
 
 	public void insertAuthor(Author author) throws SQLException {
@@ -458,7 +453,6 @@ public class AdminService {
 			conn = connUtil.getConnection();
 			BookDAO bDAO = new BookDAO(conn);
 			BookCopiesDAO bcDAO = new BookCopiesDAO(conn);
-			BookLoansDAO blDAO = new BookLoansDAO(conn);
 
 			// perform write operation depending on which object variables are set
 			// update case where both a key and name are given
@@ -785,14 +779,14 @@ public class AdminService {
 			// perform read operation depending on which object variables are set
 			// if primary key is provided, perform a read by primary key
 			if (pk != null) {
-				System.out.println("GET BOOKS BY PRIMARY KEY");
 				List<Book> books = bDAO.readBookById(pk);
 				return books;
 			}
 
 			// if a name is provided, perform a search by name
 			else if (bookName != null) {
-
+				List<Book> books = bDAO.readBookByTitle(bookName);
+				return books;
 			}
 
 			// otherwise, read everything
@@ -845,14 +839,14 @@ public class AdminService {
 			// perform read operation depending on which object variables are set
 			// if primary key is provided, perform a read by primary key
 			if (pk != null) {
-//				System.out.println("GET AUTHOR BY PRIMARY KEY");
-//				List<Branch> branches = brDAO.readBranchById(pk);
-//				return branches;
+				List<Branch> branches = brDAO.readBranchById(pk);
+				return branches;
 			}
 
 			// if a name is provided, perform a search by name
 			else if (branchName != null) {
-				// searchBranches
+				List<Branch> branches = brDAO.readBranchByName(branchName);
+				return branches;
 			}
 
 			// otherwise, read everything
@@ -890,7 +884,6 @@ public class AdminService {
 			// get a new database connection and pass it to a DAO(s)
 			conn = connUtil.getConnection();
 			PublisherDAO pDAO = new PublisherDAO(conn);
-//			BookDAO bDAO = new BookDAO(conn);
 
 			// perform read operation depending on which object variables are set
 			// if primary key is provided, perform a read by primary key
@@ -945,22 +938,19 @@ public class AdminService {
 			// perform read operation depending on which object variables are set
 			// if primary key is provided, perform a read by primary key
 			if (pk != null) {
-//				System.out.println("GET AUTHOR BY PRIMARY KEY");
-//				List<Borrower> borrowers = borrDAO.readBorrowerById(pk);
-//				return borrowers;
+				List<Borrower> borrowers = borrDAO.readBorrowerById(pk);
+				return borrowers;
 			}
 
 			// if a name is provided, perform a search by name
 			else if (borrowerName != null) {
-				// searchBorrowers
+				List<Borrower> borrowers = borrDAO.readBorrowerByName(borrowerName);
+				return borrowers;
 			}
 
 			// otherwise, read everything
 			else {
 				List<Borrower> borrowers = borrDAO.readAllBorrowers();
-//				for (Borrower a : borrowers) {
-//					a.setBooks(bDAO.readAllBooksByBorrower(a.getBorrowerId()));
-//				}
 				return borrowers;
 			}
 		} catch (Exception e) {
@@ -998,7 +988,6 @@ public class AdminService {
 			// perform read operation depending on which object variables are set
 			// if primary key is provided, perform a read by primary key
 			if (pk != null) {
-				System.out.println("GET AUTHOR BY PRIMARY KEY");
 				List<Author> authors = aDAO.readAuthorById(pk);
 				return authors;
 			}
@@ -1051,14 +1040,14 @@ public class AdminService {
 			// perform read operation depending on which object variables are set
 			// if primary key is provided, perform a read by primary key
 			if (pk != null) {
-				System.out.println("GET Genre BY PRIMARY KEY");
-				List<Genre> genres = gDAO.readAllGenres();
+				List<Genre> genres = gDAO.readGenresById(pk);
 				return genres;
 			}
 
 			// if a name is provided, perform a search by name
 			else if (genreName != null) {
-				// searchAuthors
+				List<Genre> genres = gDAO.readGenresByName(genreName);
+				return genres;
 			}
 
 			// otherwise, read everything

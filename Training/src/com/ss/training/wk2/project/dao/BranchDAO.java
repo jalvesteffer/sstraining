@@ -50,6 +50,12 @@ public class BranchDAO extends BaseDAO<Branch> {
 		return read("SELECT * FROM tbl_library_branch WHERE branchId=?", new Object[] { branchId });
 
 	}
+	
+	public List<Branch> readBranchByName(String name) throws ClassNotFoundException, SQLException {
+
+		return read("SELECT * FROM tbl_library_branch WHERE branchName=?", new Object[] { name });
+
+	}
 
 	@Override
 	public List<Branch> extractData(ResultSet rs) throws SQLException {

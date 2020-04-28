@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ss.training.wk2.project.entity.Book;
-import com.ss.training.wk2.project.entity.Genre;
-import com.ss.training.wk2.project.entity.Publisher;
 
 /**
  * @author jalveste
