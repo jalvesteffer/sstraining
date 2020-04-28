@@ -31,6 +31,7 @@ public class BorrowerService {
 	public ConnectionUtil connUtil = new ConnectionUtil();
 
 
+	// checkout
 	public boolean saveBookLoans(Book book, Branch branch, Integer cardNo) throws SQLException {
 
 		Connection conn = null; // database connection
@@ -74,6 +75,7 @@ public class BorrowerService {
 
 	}
 
+	// checkin
 	public boolean updateBookLoans(Book book, Branch branch, Integer cardNo) throws SQLException {
 
 		Connection conn = null; // database connection
@@ -233,36 +235,9 @@ public class BorrowerService {
 	}
 
 	public List<Branch> readBranches(Integer pk, String branchName) throws SQLException {
-		Connection conn = null; // reference to database connection
+		AdminService adminService = new AdminService();
 
-		try {
-			// get a database connection and pass it to a new branch DAO
-			conn = connUtil.getConnection();
-			BranchDAO pDAO = new BranchDAO(conn);
-
-			if (pk != null) {
-				// gets branch by primary key
-				List<Branch> branches = pDAO.readBranchById(pk);
-				return branches;
-			} else if (branchName != null) {
-				// gets branch by name
-			} else {
-				// returns all branches
-				List<Branch> branches = pDAO.readAllBranches();
-
-				return branches;
-			}
-		} catch (Exception e) {
-			System.out.println("read BranchDAO failed");
-			e.printStackTrace();
-		} finally {
-
-			// close the database connection
-			if (conn != null) {
-				conn.close();
-			}
-		}
-		return null;
+		return adminService.readBranches(pk, branchName);
 
 	}
 
