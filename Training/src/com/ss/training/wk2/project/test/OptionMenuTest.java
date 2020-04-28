@@ -17,15 +17,6 @@ public class OptionMenuTest {
 	public void displayMenuChoiceNullValues()	{
 		OptionMenu optMenu = new OptionMenu();
 		
-		// set display menu method argument here
-		String prompt = "Welcome to the GCIT Library Management System. Which category of a user are you";
-		List<String> optList = new ArrayList<>();
-		optList.add("Librarian");
-		optList.add("Administrator");
-		optList.add("Borrower");
-		
-		assertNull(optMenu.displayMainMenu(null, null));
-		
-		
+		assertEquals(optMenu.displayMainMenu(null, null), null);
 	}
 }

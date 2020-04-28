@@ -10,6 +10,14 @@ import java.util.Scanner;
  *  This class assists in getting a Double-type value from the user
  *  terminal
  */
+/**
+ * @author jalveste
+ *
+ */
+/**
+ * @author jalveste
+ *
+ */
 public class UserInput {
 
 	// This method asks the user in the console for a positive number (int)
@@ -60,7 +68,7 @@ public class UserInput {
 		while (!isValid) {
 			userVal = askForInt(prompt);
 			if (userVal != -1 && (userVal < min || userVal > max)) {
-				System.out.println("\nERROR: Input is not an integer between " + min + " and " + max +".");
+				System.out.println("\nERROR: Input is not an integer between " + min + " and " + max + ".");
 			} else {
 				isValid = true;
 			}
@@ -106,4 +114,29 @@ public class UserInput {
 
 		return userVal;
 	}
+
+	/**
+	 * This method validates an edited string and returns a decision in String form
+	 * of how to handle it
+	 * 
+	 * @param editedStr new String value to validate
+	 * @return "ok" proceed normally; "skip" do nothing; "quit" exit operation'
+	 *         "error" something went wrong
+	 */
+	public String validateResponse(String editedStr) {
+		if (!editedStr.isEmpty() && !"quit".equalsIgnoreCase(editedStr) && !"N/A".equalsIgnoreCase(editedStr)) {
+			System.out.println("Changing this value to " + editedStr);
+			return "ok";
+		} else if ("N/A".equalsIgnoreCase(editedStr)) {
+			System.out.println("Skipping this value");
+			return "skip";
+		} else if ("quit".equalsIgnoreCase(editedStr)) {
+			System.out.println("Quitting update");
+			return "quit";
+		} else {
+			System.out.println("Input error, exiting...");
+			return "error";
+		}
+	}
+
 }

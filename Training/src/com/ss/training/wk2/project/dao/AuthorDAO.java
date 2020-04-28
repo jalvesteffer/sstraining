@@ -13,6 +13,8 @@ import java.util.List;
 
 import com.ss.training.wk2.project.UserInput;
 import com.ss.training.wk2.project.entity.Author;
+import com.ss.training.wk2.project.entity.Book;
+import com.ss.training.wk2.project.entity.Genre;
 
 /**
  * @author jalveste
@@ -25,13 +27,12 @@ public class AuthorDAO extends BaseDAO<Author> {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Integer addAuthor(Author author) throws SQLException, ClassNotFoundException {
+	public void addAuthor(Author author) throws SQLException, ClassNotFoundException {
 
 		// create a statement Object
-		return saveWithPK("INSERT INTO tbl_authors FROM tbl_author (authorName) VALUES (?)",
-				new Object[] { author.getAuthorId() });
+		save("INSERT INTO tbl_author (authorName) VALUES (?)", new Object[] { author.getAuthorName() });
 	}
-
+	
 	public void updateAuthor(Author author) throws SQLException, ClassNotFoundException {
 
 		save("UPDATE tbl_author SET authorName=? WHERE authorId=?",
@@ -40,18 +41,32 @@ public class AuthorDAO extends BaseDAO<Author> {
 
 	public void deleteAuthor(Author author) throws ClassNotFoundException, SQLException {
 
-		save("DELETE FROM tbl_author (authorName) WHERE authorId=?", new Object[] { author.getAuthorId() });
+		save("DELETE FROM tbl_author WHERE authorId=?", new Object[] { author.getAuthorId() });
 	}
-
+	
 	public List<Author> readAllAuthors() throws ClassNotFoundException, SQLException {
 
 		return read("SELECT * FROM tbl_author", null);
 
 	}
 
+	public List<Author> readAllAuthorsByBookId(Integer bookId) throws ClassNotFoundException, SQLException {
+
+		return read(
+				"SELECT * FROM tbl_author WHERE authorId IN (SELECT authorId FROM tbl_book_authors WHERE bookId= ?)",
+				new Object[] { bookId });
+
+	}
+
 	public List<Author> readAuthorById(Integer authorId) throws ClassNotFoundException, SQLException {
 
 		return read("SELECT * FROM tbl_author WHERE authorId=?", new Object[] { authorId });
+
+	}
+	
+	public List<Author> readAuthorByName(String name) throws ClassNotFoundException, SQLException {
+
+		return read("SELECT * FROM tbl_author WHERE authorName=?", new Object[] { name });
 
 	}
 

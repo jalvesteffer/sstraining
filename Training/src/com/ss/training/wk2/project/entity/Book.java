@@ -11,12 +11,9 @@ import java.util.List;
  */
 public class Book {
 	private Integer bookId;
-	
 	private String title;
-	
 	private List<Author> authors;
-	
-	private Publisher publisher;
+	private Integer pubId;
 	// private List generes, branches, copies, etc.
 
 	/**
@@ -62,17 +59,20 @@ public class Book {
 	}
 
 	/**
-	 * @return the publisher
+	 * @return the pubId
 	 */
-	public Publisher getPublisher() {
-		return publisher;
+	public Integer getPubId() {
+		return pubId;
 	}
 
 	/**
-	 * @param publisher the publisher to set
+	 * @param pubId the pubId to set
 	 */
-	public void setPublisher(Publisher publisher) {
-		this.publisher = publisher;
+	public void setPubId(Integer pubId) {
+		this.pubId = pubId;
 	}
+
+
+	
 
 }

@@ -21,7 +21,6 @@ public class ConnectionUtil {
 		Properties prop = new Properties();
 		try (InputStream input = new FileInputStream("resources/config/lms.properties")) {
 			prop.load(input);
-			System.out.println("Loaded property values: " + prop.getProperty("DB_USERNAME"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
