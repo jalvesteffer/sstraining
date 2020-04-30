@@ -89,6 +89,7 @@ public class AuthenticationService extends HttpServlet {
 				}
 			}
 		} else {
+			
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		}
 
