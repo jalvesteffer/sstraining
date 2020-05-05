@@ -1,14 +1,9 @@
-const maxRecordsPerPage = 6;
+const maxRecordsPerPage = 6; // up to 6 records can be shown on a page
 
-let numOfResults = -1,
-    numOfPages = -1,
-    booksRemainder = -1,
-    currPage = 0,
-    i = -1, 
-    resultsStr = "";
-
-
-
+let numOfResults = -1, // number of book results return
+    numOfPages = -1, // number of pages needed to display results
+    booksRemainder = -1, // number of books on last page of results
+    currPage = 0; // current page of results shown to user
 
 // mock search results for books
 let bookResults = [
@@ -34,77 +29,186 @@ let bookResults = [
     {bookId:"0-1100-5460-1", title:"Fahrenheit 451", authorName:"Ray Bradbury"}
 ];
 
+// get number of book results to show
 numOfResults = bookResults.length;
+
+// calculate total number of page results needed
 numOfPages = Math.floor(numOfResults / maxRecordsPerPage) + 1;
+
+// number of books shown on last page
 booksRemainder = numOfResults % maxRecordsPerPage;
 
-
+// when page is loaded, this runs
 function loadResults() {
-    let paginationCode = "",
-        previousLink = "";
-
-   // Document.getElementById("resultsArea").innerHTML = resultsStr;
-
-    document.getElementById("searchLabel").innerHTML = "<h4>" + numOfResults + " Search Results Found: </h4>";
-    pgNumLink(1);
+    let searchLabelElement = document.getElementById("searchLabel");
     
+    // clear search label nodes
+    removeChildNodes(searchLabelElement);
+
+    // create a new search label nodes that include number of results found
+    let h4Element = document.createElement('h4');
+    let node = document.createTextNode(numOfResults + " Search Results Found: ");
+    h4Element.appendChild(node);
+    searchLabelElement.appendChild(h4Element);
+    
+    // user starts at page 1 of results
+    pgNumLink(1);
 }
 
+// This function shows the results for a given page number
 function pgNumLink(pg) {
-    let paginationCode = "",
-        resultsCode = "",
-        p = -1,
-        prevPage = -1,
-        nextPage = -1,
-        startResult = -1,
-        endResult = -1;
+    let p = -1, // for loop counter
+        r = -1, // for loop counter
+        prevPage = -1, // keep track of prev page number
+        nextPage = -1, // keep track of next page number
+        startResult = -1, // result number to start page with
+        endResult = -1, // result number to end page with
+        liElement = "", // holds newly created li DOM element
+        aElement = ""; // holds newly created a DOM element
 
     currPage = pg;  // set curret page to clicked on page link number
+
+    // from the page number, calculate which results to begin and end the page with
     startResult = (pg * maxRecordsPerPage) - maxRecordsPerPage;
     endResult = (pg * maxRecordsPerPage) - 1;
 
+    // get location of pagination area
+    let paginationAreaElement = document.getElementById("paginationArea");
 
-    paginationCode = '<ul class="pagination pagination-lg pt-3 justify-content-center">';
+    // call function to clear the current pagination nodes
+    removeChildNodes(paginationAreaElement);
+
+    // create new pagination nodes and set their attributes
+    let ulElement = document.createElement("ul");
+    let ulElementAtt = document.createAttribute("class");
+    ulElementAtt.value = "pagination pagination-lg pt-3 justify-content-center";
+    ulElement.setAttributeNode(ulElementAtt);
+
+    // create previous navigation button.  Its disabled on the 1st page of results
     if (currPage === 1) {
-        paginationCode += '<li class="page-item disabled"><a class="page-link" href="#">\<</a></li>';
+        liElement = createLiNode("page-item disabled");
+        aElement = createANode("", "#searchLabel", "\<");
+        liElement.appendChild(aElement);
     } else{
         prevPage = currPage - 1;
-        paginationCode += '<li class="page-item"><a class="page-link" onclick="pgNumLink(' + prevPage + ')" href="#">\<</a></li>';
+        liElement = createLiNode("page-item");
+        aElement = createANode("pgNumLink(" + prevPage + ")", "#searchLabel", "\<");
+        liElement.appendChild(aElement);
     }
 
+    // append the previous naviation button nodes to DOM
+    ulElement.appendChild(liElement);
+
+    // for each page of results, create pagination nodes.  The current page
+    // button will be set to active
     for (p = 1; p <= numOfPages; p++) {
         if (currPage === p) {
-            paginationCode += '<li class="page-item active"><a class="page-link" '
-                + 'onclick="pgNumLink(' + p + ')">' 
-                + p + '</a></li>';
+            liElement = createLiNode("page-item active");
+            aElement = createANode("pgNumLink(" + p + ")", "", p);
         } else  {
-            paginationCode += '<li class="page-item"><a class="page-link" '
-                + 'onclick="pgNumLink(' + p + ')" href="#">' 
-                + p + '</a></li>';
+            liElement = createLiNode("page-item");
+            aElement = createANode("pgNumLink(" + p + ")", "#searchLabel", p);
         }
-        
+        liElement.appendChild(aElement);
+        ulElement.appendChild(liElement);
     }
-    
+
+    // create next navigation button.  Its disabled on the last page of results
     if (currPage === numOfPages) {
-        paginationCode += '<li class="page-item disabled"><a class="page-link" href="#">\></a></li></ul>';
+        liElement = createLiNode("page-item disabled");
+        aElement = createANode("", "#searchLabel", "\>");
     } else {
         nextPage = currPage + 1;
-        paginationCode += '<li class="page-item"><a class="page-link" onclick="pgNumLink(' + nextPage + ')" href="#">\></a></li></ul>';
+        liElement = createLiNode("page-item");
+        aElement = createANode("pgNumLink(" + nextPage + ")", "#searchLabel", "\>");
     }
-        
+    liElement.appendChild(aElement);
+    ulElement.appendChild(liElement);
+
+    // update the DOM to show new pagination
+    paginationAreaElement.appendChild(ulElement);
 
 
+    
+    // COD TO SHOW THE BOOK RESULTS
 
-    document.getElementById("paginationArea").innerHTML = paginationCode;
-
-
+    // account for less than a full page of results on last page of results
     if (currPage === numOfPages)    {
         endResult = numOfResults - 1;
     }
+
+    let para, node; // to hold newly created elements
+
+    // remember results area
+    let resultsAreaElement = document.getElementById("resultsArea");
+
+    // call function to clear current result nodes
+    removeChildNodes (resultsAreaElement);
+    
+    // for each search result, create new nodes and append to results area DOM element
     for (r = startResult; r <= endResult; r++) {
-        resultsCode += '<p>' + (r + 1) + ') "' + bookResults[r].title + '" by ' 
+        para = document.createElement("p");
+        node = document.createTextNode((r + 1) + ') "' + bookResults[r].title + '" by ' 
             + bookResults[r].authorName 
-            + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ISBN #: ' + bookResults[r].bookId + '</p>';
+            + ', ISBN #: ' + bookResults[r].bookId);
+        para.appendChild(node);
+        resultsAreaElement.appendChild(para);
     }
-    document.getElementById("resultsArea").innerHTML = resultsCode;
 } // end function
+
+// this function removes all child nodes of a parent node
+function removeChildNodes(parentNode)   {
+    while (parentNode.firstChild)   {
+        parentNode.removeChild(parentNode.lastChild);
+    }
+}
+
+// this function creates a new List Item node
+// parameters:
+//   classAttStr - string for class attributes value
+function createLiNode(classAttStr) {
+    let liElement = document.createElement("li");
+    let liElementAtt = document.createAttribute("class");
+    liElementAtt.value = classAttStr;
+    liElement.setAttributeNode(liElementAtt);
+    
+    return liElement;
+}
+
+// this function creates a new A node as well as a contained
+//   child text node
+// parameters:
+//   onClickStr - string for onclick event attribute value
+//   hrefStr - string for link attribute value
+//   textStr - string for contained text node value
+function createANode(onClickStr, hrefStr, textStr) {
+    let aElement = document.createElement("a");
+    let aElementAtt1 = document.createAttribute("class");
+
+    aElementAtt1.value = "page-link";
+    aElement.setAttributeNode(aElementAtt1);
+
+    if (onClickStr != "") {
+        let aElementAtt2 = document.createAttribute("onclick");
+        aElementAtt2.value = onClickStr;
+        aElement.setAttributeNode(aElementAtt2);
+    }
+
+    if (hrefStr != "") {
+        let aElementAtt3 = document.createAttribute("href");
+        aElementAtt3.value = hrefStr;
+        aElement.setAttributeNode(aElementAtt3);
+    }
+    
+    let textNode = createTextNode(textStr);
+    aElement.appendChild(textNode);
+
+    return aElement;
+}
+
+// this function creates a new text node containing passed textStr value
+function createTextNode(textStr) {
+    let newElement = document.createTextNode(textStr);
+
+    return newElement;
+}
